@@ -69,7 +69,7 @@ else
     featIdx = kshell_2(corrMatrix);
 
 
-    %% 五折 start
+   % %% 五折 start
      Nfold=5;
      td = trData(:,featIdx);
      tl = trLabel;
