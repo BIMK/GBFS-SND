@@ -1,5 +1,5 @@
 function [f,featIdx]  = evaluate_objective_f(M, individual_adj)
-% ·µ»Ø featIdx  ÔÚ½«±àÂë×ª»»Îªsample¸öÌåÊ±Ê¹ÓÃ
+% è¿”å› featIdx  åœ¨å°†ç¼–ç è½¬æ¢ä¸ºsampleä¸ªä½“æ—¶ä½¿ç”¨
 % global featSetAndMdlMap  featNumMap  featAccMap;
 global   trData   trLabel data label trIdx;
 global OMEGA DELT;
@@ -36,7 +36,7 @@ global TTTT
 %% Kursawe proposed by Frank Kursawe.
 % Take a look at the following reference
 % A variant of evolution strategies for vector optimization.
-% In H. P. Schwefel and R. Männer, editors, Parallel Problem Solving from
+% In H. P. Schwefel and R. Mé‹˜ner, editors, Parallel Problem Solving from
 % Nature. 1st Workshop, PPSN I, volume 496 of Lecture Notes in Computer 
 % Science, pages 193-197, Berlin, Germany, oct 1991. Springer-Verlag. 
 %
@@ -60,48 +60,48 @@ f = [];
 % f(2) = sum;
 
 % corrMatrix =  cutAdjMatrix(RMatrix, THRESHOLD, 0);
-corrMatrix =individual_adj; % ¸öÌå´ú±íµÄÍøÂç
-if ~sum(any(corrMatrix)) % ==0 ËµÃ÷¾ØÕóËùÓĞÔªËØÎªÁã
-    f = [inf, inf]; % ÉÏ¸ö°æ±¾´ÎÊı¿ÉÄÜÓĞÎó£¬²»Ó¦Îª[-inf, inf]
+corrMatrix =individual_adj; % ä¸ªä½“ä»£è¡¨çš„ç½‘ç»œ
+if ~sum(any(corrMatrix)) % ==0 è¯´æ˜çŸ©é˜µæ‰€æœ‰å…ƒç´ ä¸ºé›¶
+    f = [inf, inf]; % ä¸Šä¸ªç‰ˆæœ¬æ¬¡æ•°å¯èƒ½æœ‰è¯¯ï¼Œä¸åº”ä¸º[-inf, inf]
     featIdx = logical(ones(1,size(data,2)));
 else
 
     featIdx = kshell_2(corrMatrix);
 
 
-    %% Ê®ÕÛ start
-%     Nfold=10;
-%     td = trData(:,featIdx);
-%     tl = trLabel;
-%     
-%     indices = crossvalind('Kfold',tl,Nfold);  
-%     F1=zeros(1,Nfold);
-%     for i = 1:Nfold
-%         test = (indices == i); train = ~test;
-%         mdl = fitcknn(td(train, :), tl(train, :), 'NumNeighbors', 5);
-%         plabel = predict(mdl, td(test, :));
-%         F1(1,i)=-sum(plabel==tl(test,:))/sum(test); %¾«¶È,×î´ó»¯£¬È¡¸º
-%     end
-% 
-%     f(1) = mean(F1);
-%     f(2) = length(featIdx); %ÌØÕ÷Êı
-    %% Ê®ÕÛ end
+    %% äº”æŠ˜ start
+     Nfold=5;
+     td = trData(:,featIdx);
+     tl = trLabel;
+     
+     indices = crossvalind('Kfold',tl,Nfold);  
+     F1=zeros(1,Nfold);
+     for i = 1:Nfold
+         test = (indices == i); train = ~test;
+         mdl = fitcknn(td(train, :), tl(train, :), 'NumNeighbors', 5);
+         plabel = predict(mdl, td(test, :));
+         F1(1,i)=-sum(plabel==tl(test,:))/sum(test); %ç²¾åº¦,æœ€å¤§åŒ–ï¼Œå–è´Ÿ
+     end
+ 
+     f(1) = mean(F1);
+     f(2) = length(featIdx); %ç‰¹å¾æ•°
+    %% äº”æŠ˜ end
     
-    %% Ö±½Ó start
-    mdl = fitcknn(data(trIdx, featIdx), label(trIdx,:), 'NumNeighbors', 5);
-    plabel = predict(mdl, data(trIdx, featIdx));
-
-    f(1) = -sum(plabel==label(trIdx,:))/sum(trIdx); %¾«¶È,×î´ó»¯£¬È¡¸º
-
-    f(2) = length(featIdx); %ÌØÕ÷Êı
+    %% ç›´æ¥ start
+%    mdl = fitcknn(data(trIdx, featIdx), label(trIdx,:), 'NumNeighbors', 5);
+%    plabel = predict(mdl, data(trIdx, featIdx));
+%
+%    f(1) = -sum(plabel==label(trIdx,:))/sum(trIdx); %ç²¾åº¦,æœ€å¤§åŒ–ï¼Œå–è´Ÿ
+%
+%   f(2) = length(featIdx); %ç‰¹å¾æ•°
     
-    %% Ö±½Ó end
+    %% ç›´æ¥ end
     
     tfeat = featIdx;
     featIdx = logical(zeros(1,size(data,2)));
     featIdx(tfeat) = true;
 end
-% Èç¹ûÊÇĞÂ¸öÌå£¬Ôò¼ÓÈëÀúÊ·¼ÇÂ¼ÖĞ
+% å¦‚æœæ˜¯æ–°ä¸ªä½“ï¼Œåˆ™åŠ å…¥å†å²è®°å½•ä¸­
 % if ~isKey(featSetAndMdlMap,THRESHOLD)
 %     featSetAndMdlMap(THRESHOLD) = struct('featIdx',featIdx, 'Mdl', mdl);
 %     featAccMap(THRESHOLD) = f(1);
